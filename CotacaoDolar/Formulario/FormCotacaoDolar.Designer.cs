@@ -148,6 +148,7 @@
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "FormCotacaoDolar";
+            this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Cotação Dolar";
             this.ResumeLayout(false);
             this.PerformLayout();

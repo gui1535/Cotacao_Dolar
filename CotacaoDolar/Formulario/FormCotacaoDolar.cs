@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
+﻿using CotacaoDolar.Classes;
+using Newtonsoft.Json;
+using System;
+using System.Globalization;
 using System.Net.Http;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace CotacaoDolar
@@ -27,14 +23,40 @@ namespace CotacaoDolar
             // Bloco
             using (HttpClient client = new HttpClient())
             {
-                // Var responsavel pela requisição Get
-                var response = client.GetAsync(strURL).Result;
-
-                // Verificar se obteve sucesso na requisição
-                if (response.IsSuccessStatusCode == true)
+                // Tratando erro
+                try
                 {
-                    // String de resultado
-                    var resultado = response.Content.ReadAsStringAsync().Result;
+                    // Var responsavel pela requisição Get
+                    var response = client.GetAsync(strURL).Result;
+
+                    // Verificar se obteve sucesso na requisição
+                    if (response.IsSuccessStatusCode == true)
+                    {
+                        // String de resultado
+                        var resultado = response.Content.ReadAsStringAsync().Result;
+
+                        // Pegar o resultado e deserializar para o objeto
+                        Mercado mercado = JsonConvert.DeserializeObject<Mercado>(resultado);
+
+                        // Formatando e atribuindo resultados
+                        lbMstCompra.Text = String.Format(CultureInfo.GetCultureInfo("pt-BR"), "{0:C}", mercado.Moeda.Compra);
+                        lbMstVenda.Text = String.Format(CultureInfo.GetCultureInfo("pt-BR"), "{0:C}", mercado.Moeda.Venda);
+                        lbMsrVariacao.Text = String.Format(CultureInfo.GetCultureInfo("pt-BR"), "{0:P}", mercado.Moeda.Variacao / 100);
+                    }
+                    else
+                    {
+                        lbMstCompra.Text = "-";
+                        lbMstVenda.Text = "-";
+                        lbMsrVariacao.Text = "-";
+                    }
+                }
+                catch (Exception ex)
+                {
+                    lbMstCompra.Text = "-";
+                    lbMstVenda.Text = "-";
+                    lbMsrVariacao.Text = "-";
+
+                    MessageBox.Show(ex.Message);
                 }
             }
         }
