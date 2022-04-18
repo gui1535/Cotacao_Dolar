@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\Mercado.cs" />
     <Compile Include="Classes\Moeda.cs" />
     <Compile Include="Formulario\FormCotacaoDolar.cs">
       <SubType>Form</SubType>
